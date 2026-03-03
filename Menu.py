@@ -35,6 +35,7 @@ class Menu:
         self.exitButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 150), (100, 100), WHITE, "EXIT")
         self.statButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 300), (100, 100), WHITE, "STATS")
         self.instructionsButton = Button((WIN_WIDTH - 120, WIN_HEIGHT - 70), (100, 50), WHITE, "Help")
+        self.soundButton = Button((20, WIN_HEIGHT - 70), (100, 50), WHITE, "Sound")
         self.coOpButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "CO-OP")
 
         
@@ -63,6 +64,7 @@ class Menu:
         self.exitButton.draw(self.screen, BLACK)
         self.statButton.draw(self.screen,BLACK)
         self.instructionsButton.draw(self.screen,BLACK)
+        self.soundButton.draw(self.screen,BLACK)
         self.coOpButton.draw(self.screen,BLACK)
     
         pygame.display.update()
