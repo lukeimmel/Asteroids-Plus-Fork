@@ -90,11 +90,22 @@ class Menu:
         inst_menu = InstructionsMenu(self.screen)
         inst_menu.run()
 
+    def update_volume(self):
+        config.MUSIC_CHANNEL.set_volume(self.volume)
+        config.ASTEROID_CHANNEL.set_volume(self.volume)
+        config.PLAYER_CHANNEL.set_volume(self.volume)
+        config.PLAYER_DESTROYED_CHANNEL.set_volume(self.volume)
+        config.SHIP_CHANNEL.set_volume(self.volume)
+        config.POWERUP_CHANNEL.set_volume(self.volume)
+
     def show_sound_controls(self):
         sound_controls = SoundControls(self.screen, self.volume)
         self.volume = sound_controls.run()
+        self.update_volume()
+
 
     def play(self):
+        self.update_volume()
         selected_ship = 0
         while True:
             m.draw()

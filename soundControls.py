@@ -34,7 +34,7 @@ class SoundControls:
         slider_y = self.submenu_rect.y + 60
         slider_w = self.submenu_bg.get_width() - 100
         slider = Slider(self.screen, slider_x, slider_y, slider_w, 20, min=0, max=100, step=1, initial=int(self.volume * 100))
-        output = TextBox(self.screen, slider_x + (slider_w // 2) - 15, slider_y + 80, 30, 30, fontSize=21)
+        output = TextBox(self.screen, slider_x + (slider_w // 2) - 15, slider_y + 80, 30, 30, fontSize=18)
 
         while self.running:
             events = pygame.event.get()
