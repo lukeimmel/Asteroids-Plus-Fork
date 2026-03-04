@@ -6,6 +6,7 @@ from leaderboard import *
 from instructions import *
 from CoOp import *
 import pygame.font
+import config
 from soundControls import SoundControls
 
 
@@ -24,6 +25,7 @@ class Menu:
         stars_image = pygame.image.load('Images/backgrounds/space-stars.png')
         self.bg_stars = pygame.transform.scale(stars_image, (WIN_WIDTH, WIN_HEIGHT))
         self.shipicon = pygame.image.load('Images/ships/ship-a/ship-a-damaged.png')
+        self.volume = INITIAL_VOLUME
         
         # init vars for background movement
         self.bg_stars_x1 = 0
@@ -89,8 +91,8 @@ class Menu:
         inst_menu.run()
 
     def show_sound_controls(self):
-        sound_controls = SoundControls(self.screen)
-        sound_controls.run()
+        sound_controls = SoundControls(self.screen, self.volume)
+        self.volume = sound_controls.run()
 
     def play(self):
         selected_ship = 0

@@ -7,7 +7,7 @@ from pygame_widgets.slider import Slider
 from pygame_widgets.textbox import TextBox
 
 class SoundControls:
-    def __init__(self, screen):
+    def __init__(self, screen, current_volume):
         self.screen = screen
         self.running = True
 
@@ -26,12 +26,14 @@ class SoundControls:
         button_y_start = 100  # Starting y-position of the first button
         self.exitButton = Button((300, button_y_start + 500), (200, 50), WHITE, 'Return')
 
+        self.volume = current_volume
+
     def run(self):
         # Initialize and draw the slider
         slider_x = self.submenu_rect.x + 50
         slider_y = self.submenu_rect.y + 60
         slider_w = self.submenu_bg.get_width() - 100
-        slider = Slider(self.screen, slider_x, slider_y, slider_w, 20, min=0, max=99, step=1)
+        slider = Slider(self.screen, slider_x, slider_y, slider_w, 20, min=0, max=100, step=1, initial=int(self.volume * 100))
         output = TextBox(self.screen, slider_x + (slider_w // 2) - 15, slider_y + 80, 30, 30, fontSize=21)
 
         while self.running:
@@ -52,9 +54,12 @@ class SoundControls:
 
             output.disable()  # Act as label instead of textbox
             output.setText(slider.getValue())
+            self.volume = slider.getValue() / 100
 
             pygame_widgets.update(events)
             pygame.display.update()
+
+        return self.volume
 
     def update_background(self):
         self.bg_stars_x1 -= 1  # Adjust speed as necessary
