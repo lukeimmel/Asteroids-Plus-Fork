@@ -35,6 +35,7 @@ class CoOp:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font('Galaxus-z8Mow.ttf', 32)
         self.running = True
+        self.paused = False
 
         #init sprite groups
         self.asteroids = pygame.sprite.Group()
@@ -61,6 +62,8 @@ class CoOp:
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                self.paused = not self.paused
                 
     def new(self):
         #new game
@@ -257,7 +260,10 @@ class CoOp:
         self.new()
         while self.playing:
             self.events()
-            self.update()
+
+            if not self.paused:
+                self.update()
+
             self.draw()
                 
         self.playerLost()
