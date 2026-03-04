@@ -6,6 +6,8 @@ from leaderboard import *
 from instructions import *
 from CoOp import *
 import pygame.font
+from soundControls import SoundControls
+
 
 class Menu:
     def __init__(self):
@@ -86,6 +88,10 @@ class Menu:
         inst_menu = InstructionsMenu(self.screen)
         inst_menu.run()
 
+    def show_sound_controls(self):
+        sound_controls = SoundControls(self.screen)
+        sound_controls.run()
+
     def play(self):
         selected_ship = 0
         while True:
@@ -114,6 +120,9 @@ class Menu:
 
                 if self.instructionsButton.is_clicked(event):
                     self.show_instructions()
+
+                if self.soundButton.is_clicked(event):
+                    self.show_sound_controls()
 
                 if self.statButton.is_clicked(event):
                     # exit
