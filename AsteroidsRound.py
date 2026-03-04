@@ -30,6 +30,8 @@ class Game:
         self.font = pygame.font.Font('Galaxus-z8Mow.ttf', 32)
         self.running = True
 
+        self.paused = False
+
         
 
         # all variables for the ship class
@@ -85,6 +87,8 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                self.paused = not self.paused
 
     def update(self):
         #game loop updates
@@ -182,6 +186,9 @@ class Game:
         
     #create background screen for game
     def draw(self):
+        if self.paused:
+            #draw screen / observe stillness
+            return
         self.screen.blit(self.background, (0,0))
         self.screen.blit(self.bg_stars, (self.bg_stars_x1 ,0))
         self.screen.blit(self.bg_stars, (self.bg_stars_x2 ,0))
@@ -324,9 +331,14 @@ class Game:
         # Game loop
             while self.playing:
                 self.events()
-                self.update()
+
+                if not self.paused:
+                    self.update()
+
                 self.draw()
-                self.player_bullets.update()
+
+                if not self.paused:
+                    self.player_bullets.update()
 
             # Check for game over condition
                 if self.player.lives <= 0:
