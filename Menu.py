@@ -6,6 +6,9 @@ from leaderboard import *
 from instructions import *
 from CoOp import *
 import pygame.font
+import config
+from soundControls import SoundControls
+
 
 class Menu:
     def __init__(self):
@@ -22,6 +25,7 @@ class Menu:
         stars_image = pygame.image.load('Images/backgrounds/space-stars.png')
         self.bg_stars = pygame.transform.scale(stars_image, (WIN_WIDTH, WIN_HEIGHT))
         self.shipicon = pygame.image.load('Images/ships/ship-a/ship-a-damaged.png')
+        self.volume = INITIAL_VOLUME
         
         # init vars for background movement
         self.bg_stars_x1 = 0
@@ -35,6 +39,7 @@ class Menu:
         self.exitButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 150), (100, 100), WHITE, "EXIT")
         self.statButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 300), (100, 100), WHITE, "STATS")
         self.instructionsButton = Button((WIN_WIDTH - 120, WIN_HEIGHT - 70), (100, 50), WHITE, "Help")
+        self.soundButton = Button((20, WIN_HEIGHT - 70), (100, 50), WHITE, "Sound")
         self.coOpButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "CO-OP")
 
         
@@ -63,6 +68,7 @@ class Menu:
         self.exitButton.draw(self.screen, BLACK)
         self.statButton.draw(self.screen,BLACK)
         self.instructionsButton.draw(self.screen,BLACK)
+        self.soundButton.draw(self.screen,BLACK)
         self.coOpButton.draw(self.screen,BLACK)
     
         pygame.display.update()
@@ -84,7 +90,22 @@ class Menu:
         inst_menu = InstructionsMenu(self.screen)
         inst_menu.run()
 
+    def update_volume(self):
+        config.MUSIC_CHANNEL.set_volume(self.volume)
+        config.ASTEROID_CHANNEL.set_volume(self.volume)
+        config.PLAYER_CHANNEL.set_volume(self.volume)
+        config.PLAYER_DESTROYED_CHANNEL.set_volume(self.volume)
+        config.SHIP_CHANNEL.set_volume(self.volume)
+        config.POWERUP_CHANNEL.set_volume(self.volume)
+
+    def show_sound_controls(self):
+        sound_controls = SoundControls(self.screen, self.volume)
+        self.volume = sound_controls.run()
+        self.update_volume()
+
+
     def play(self):
+        self.update_volume()
         selected_ship = 0
         while True:
             m.draw()
@@ -112,6 +133,9 @@ class Menu:
 
                 if self.instructionsButton.is_clicked(event):
                     self.show_instructions()
+
+                if self.soundButton.is_clicked(event):
+                    self.show_sound_controls()
 
                 if self.statButton.is_clicked(event):
                     # exit

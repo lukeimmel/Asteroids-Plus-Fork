@@ -344,6 +344,7 @@ class Game:
                     if event.type == pygame.QUIT:
                         waiting = False
                         self.running = False
+                        MUSIC_CHANNEL.stop()
                         return 0
                         
                     if event.type == pygame.KEYDOWN:
@@ -352,6 +353,7 @@ class Game:
                         elif event.key == pygame.K_q:  # Quit the game
                             waiting = False
                             self.running = False
+                            MUSIC_CHANNEL.stop()
                             return 0
 
 
