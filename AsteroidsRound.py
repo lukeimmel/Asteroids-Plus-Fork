@@ -30,6 +30,8 @@ class Game:
         self.font = pygame.font.Font('Galaxus-z8Mow.ttf', 32)
         self.running = True
 
+        self.paused = False
+
         
 
         # all variables for the ship class
@@ -85,6 +87,8 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                self.paused = not self.paused
 
     def update(self):
         #game loop updates
@@ -202,6 +206,17 @@ class Game:
         # Draw the lives text
         self.screen.blit(lives_text, (10, 10))
         self.screen.blit(score_text, (10,40))
+
+        if self.paused:
+            overlay = pygame.Surface((WIN_WIDTH, WIN_HEIGHT))
+            overlay.set_alpha(180)
+            overlay.fill((0, 0, 0))
+            self.screen.blit(overlay, (0, 0))
+
+            pause_text = self.font.render("PAUSED", True, WHITE)
+            pause_rect = pause_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
+            self.screen.blit(pause_text, pause_rect)
+
         pygame.display.update()
 
     def update_background(self):
@@ -324,9 +339,14 @@ class Game:
         # Game loop
             while self.playing:
                 self.events()
-                self.update()
+
+                if not self.paused:
+                    self.update()
+
                 self.draw()
-                self.player_bullets.update()
+
+                if not self.paused:
+                    self.player_bullets.update()
 
             # Check for game over condition
                 if self.player.lives <= 0:
