@@ -14,14 +14,13 @@ class Game:
     asteroid_timer = 0
     asteroid_spawn_delay = 0.7
 
-    def __init__(self, selected_ship=0):
+    def __init__(self, selected_ship=0, bg_path='Images/backgrounds/space-backgound.png', stars_path='Images/backgrounds/space-stars.png'):
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
-
         self.selected_ship = selected_ship
 
-        self.background = pygame.image.load('Images/backgrounds/space-backgound.png').convert_alpha()
+        self.background = pygame.image.load(bg_path).convert_alpha()
         self.background = pygame.transform.scale(self.background, (WIN_WIDTH, WIN_HEIGHT))
-        stars_image = pygame.image.load('Images/backgrounds/space-stars.png')
+        stars_image = pygame.image.load(stars_path)
         self.bg_stars = pygame.transform.scale(stars_image, (WIN_WIDTH, WIN_HEIGHT))
         self.bg_stars_x1 = 0
         self.bg_stars_x2 = WIN_WIDTH
@@ -29,10 +28,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font('Galaxus-z8Mow.ttf', 32)
         self.running = True
-
         self.paused = False
-
-        
 
         # all variables for the ship class
         self.game_timer = 0
@@ -53,7 +49,7 @@ class Game:
         self.spawn_timer_powerup = 0
 
     def new(self):
-        
+
         #new game
         self.playing = True
 
@@ -80,7 +76,7 @@ class Game:
         self.player = Player(self, (WIN_WIDTH/TILESIZE)/2, (WIN_HEIGHT/TILESIZE)/2, ship_image_list)
 
 
-    
+
     def events(self):
         for event in pygame.event.get():
             #when you x-out of window, game quits
@@ -98,7 +94,7 @@ class Game:
         self.game_timer += 1
         self.spawn_timer_powerup += 1
         self.asteroid_timer += 0.5
- 
+
         self.asteroid_alg()
         # check all collision for asteroid
         for asteroid in self.asteroids:
@@ -129,7 +125,7 @@ class Game:
                     new_x, new_y = asteroid.rect.centerx, asteroid.rect.centery
                     self.spawn_asteroid(new_size, new_x, new_y)
                     self.spawn_asteroid(new_size, new_x, new_y)
-        
+
         # check all collision for alien ship ~ in our version, alien ships plow through asteroids
         for ship in self.ships:
             if ship.check_collision(self.player_bullets):
@@ -170,27 +166,27 @@ class Game:
                 self.spawn_delay_ship -= 5
                 self.spawn_delay_reg_bullet -= 5
             self.spawn_delay_sp_bullet -= 5
-            
+
             #points given each minute
             self.player.score+=500
             self.game_timer = 0
-        
+
         # spawn powerups based off the game time
         if self.spawn_timer_powerup >= SPAWN_DELAY_POWERUP * FPS:
             powerup = Powerups(self.all_sprites, self.player)
             self.all_sprites.add(powerup)
             self.powerups.add(powerup)
             self.spawn_timer_powerup = 0
-            
-        
-        
+
+
+
     #create background screen for game
     def draw(self):
         self.screen.blit(self.background, (0,0))
         self.screen.blit(self.bg_stars, (self.bg_stars_x1 ,0))
         self.screen.blit(self.bg_stars, (self.bg_stars_x2 ,0))
-        self.all_sprites.draw(self.screen) 
-        
+        self.all_sprites.draw(self.screen)
+
         self.clock.tick(FPS) #update the screen based on FPS
         minutes = self.game_timer // (60 * FPS)
         seconds = (self.game_timer // FPS) % 60
@@ -202,7 +198,7 @@ class Game:
 
         lives_text = self.font.render('Lives: ' + str(self.player.lives), False, WHITE)
         score_text = self.font.render('Score: ' + str(self.player.score), False, WHITE)
-        
+
         # Draw the lives text
         self.screen.blit(lives_text, (10, 10))
         self.screen.blit(score_text, (10,40))
@@ -223,11 +219,11 @@ class Game:
         # Move backgrounds to the left
         self.bg_stars_x1 -= 1  # Adjust speed as necessary
         self.bg_stars_x2 -= 1
-        
+
         # If the first image is completely off-screen
         if self.bg_stars_x1 + WIN_WIDTH < 0:
             self.bg_stars_x1 = WIN_WIDTH
-            
+
         # If the second image is completely off-screen
         if self.bg_stars_x2 + WIN_WIDTH < 0:
             self.bg_stars_x2 = WIN_WIDTH
@@ -237,15 +233,15 @@ class Game:
         ship = Ships(self.all_sprites, self.ship_bullets)
         self.all_sprites.add(ship)
         self.ships.add(ship)
-        
+
     def spawn_asteroid(self, size, x = None, y = None):
         asteroid = Asteroid(self, size, x, y)
         self.all_sprites.add(asteroid)
         self.asteroids.add(asteroid)
-        
+
     def asteroid_alg(self):
         size = random.choice([BIG_ASTEROID_SIZE, MED_ASTEROID_SIZE, SM_ASTEROID_SIZE])
-        current_minute = self.game_timer // (60 * FPS) 
+        current_minute = self.game_timer // (60 * FPS)
 
         if self.asteroid_timer >= self.asteroid_spawn_delay * FPS:
             if current_minute == 1:
@@ -278,7 +274,7 @@ class Game:
                 self.spawn_asteroid(size)
                 self.spawn_asteroid(size)
             self.asteroid_timer = 0  # Reset the timer after spawning an asteroid
-    
+
 
     def updateLeaderboard(self):
 
@@ -292,7 +288,7 @@ class Game:
                 #s#elf.screen.blit(self.bg_stars, (self.bg_stars_x2 ,0))
                 #s#e#lf.all_sprites.update()
                 #self.update_background()
-                #self.all_sprites.draw(self.screen) 
+                #self.all_sprites.draw(self.screen)
 
                 text_surface = self.font.render("NEW HIGHSCORE!", True, (255, 255, 255))  # Black text
 
@@ -300,7 +296,7 @@ class Game:
                 text_rect = text_surface.get_rect(center=(WIN_WIDTH//2, (WIN_HEIGHT//2)-100))
                 self.screen.blit(text_surface, text_rect)
 
-                # Update the display 
+                # Update the display
                # pygame.display.update()
 
 
@@ -310,7 +306,7 @@ class Game:
         game_over_text = self.font.render("Game Over", True, (255, 255, 255))
         score_text = self.font.render("Score: " + str(self.player.score), True, (255, 255, 255))
         restart_text = self.font.render("Press R to restart", True, (255, 255, 255))
-        menu_text = self.font.render("Press Q for menu", True, (255, 255, 255))  
+        menu_text = self.font.render("Press Q for menu", True, (255, 255, 255))
         # Position text on the screen
         game_over_rect = game_over_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
         score_rect = score_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2-50))
@@ -320,14 +316,14 @@ class Game:
         self.screen.blit(game_over_text, game_over_rect)
         self.screen.blit(score_text, score_rect)
         self.screen.blit(restart_text, restart_rect)
-        self.screen.blit(menu_text, menu_rect) 
+        self.screen.blit(menu_text, menu_rect)
         pygame.display.flip()
 
     def play_explosion(self, position, size):
         explosion = Explosion(position, size)
         self.all_sprites.add(explosion)
 
-        
+
     def main(self):
     # Start the background music
         MUSIC_CHANNEL.play(BACKGROUND_MUSIC, loops=-1)
@@ -350,7 +346,7 @@ class Game:
 
             # Check for game over condition
                 if self.player.lives <= 0:
-                    
+
                     self.game_timer = 0   # Reset game time to 0:00
                     self.playing = False  # Exit the game loop
 
@@ -364,16 +360,14 @@ class Game:
                     if event.type == pygame.QUIT:
                         waiting = False
                         self.running = False
-                        MUSIC_CHANNEL.stop()
                         return 0
-                        
+
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_r:  # Restart the game
                             waiting = False
                         elif event.key == pygame.K_q:  # Quit the game
                             waiting = False
                             self.running = False
-                            MUSIC_CHANNEL.stop()
                             return 0
 
 

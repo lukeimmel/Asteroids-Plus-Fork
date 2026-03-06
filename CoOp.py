@@ -19,18 +19,16 @@ class CoOp:
     Width = WIN_WIDTH 
     Height = WIN_HEIGHT
 
-    def __init__(self,selected_ship):
-        self.screen = pygame.display.set_mode((self.Width, self.Height))
-
+    def __init__(self, selected_ship=0, bg_path='Images/backgrounds/space-backgound.png', stars_path='Images/backgrounds/space-stars.png'):
+        self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.selected_ship = selected_ship
 
-
-        self.background = pygame.image.load('Images/backgrounds/space-backgound.png').convert_alpha()
-        self.background = pygame.transform.scale(self.background, (self.Width, self.Height))
-        stars_image = pygame.image.load('Images/backgrounds/space-stars.png')
-        self.bg_stars = pygame.transform.scale(stars_image, (self.Width, self.Height))
+        self.background = pygame.image.load(bg_path).convert_alpha()
+        self.background = pygame.transform.scale(self.background, (WIN_WIDTH, WIN_HEIGHT))
+        stars_image = pygame.image.load(stars_path)
+        self.bg_stars = pygame.transform.scale(stars_image, (WIN_WIDTH, WIN_HEIGHT))
         self.bg_stars_x1 = 0
-        self.bg_stars_x2 = self.Width
+        self.bg_stars_x2 = WIN_WIDTH
 
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font('Galaxus-z8Mow.ttf', 32)
