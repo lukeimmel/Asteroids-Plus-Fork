@@ -324,9 +324,14 @@ class Game:
         # Game loop
             while self.playing:
                 self.events()
-                self.update()
+
+                if not self.paused:
+                    self.update()
+
                 self.draw()
-                self.player_bullets.update()
+
+                if not self.paused:
+                    self.player_bullets.update()
 
             # Check for game over condition
                 if self.player.lives <= 0:
