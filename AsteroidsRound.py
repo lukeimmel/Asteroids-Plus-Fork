@@ -202,6 +202,17 @@ class Game:
         # Draw the lives text
         self.screen.blit(lives_text, (10, 10))
         self.screen.blit(score_text, (10,40))
+
+        if self.paused:
+            overlay = pygame.Surface((WIN_WIDTH, WIN_HEIGHT))
+            overlay.set_alpha(180)
+            overlay.fill((0, 0, 0))
+            self.screen.blit(overlay, (0, 0))
+
+            pause_text = self.font.render("PAUSED", True, WHITE)
+            pause_rect = pause_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
+            self.screen.blit(pause_text, pause_rect)
+
         pygame.display.update()
 
     def update_background(self):
