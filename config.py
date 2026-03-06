@@ -136,6 +136,7 @@ POWERUP_MUSIC = pygame.mixer.Sound('Sounds/Obtain Powerup.mp3')
 BOMB_MUSIC = pygame.mixer.Sound('Sounds/Explosion.mp3')
         
 # play music on separate channels
+INITIAL_VOLUME = 0.5
 MUSIC_CHANNEL = pygame.mixer.Channel(0)
 ASTEROID_CHANNEL = pygame.mixer.Channel(1)
 PLAYER_CHANNEL = pygame.mixer.Channel(2)

@@ -35,6 +35,7 @@ class CoOp:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font('Galaxus-z8Mow.ttf', 32)
         self.running = True
+        self.paused = False
 
         #init sprite groups
         self.asteroids = pygame.sprite.Group()
@@ -61,6 +62,8 @@ class CoOp:
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                self.paused = not self.paused
                 
     def new(self):
         #new game
@@ -109,6 +112,16 @@ class CoOp:
         time_text = self.font.render(f"Time: {minutes:02}-{seconds:02}", True, WHITE)
         time_rect = time_text.get_rect(topright=(WIN_WIDTH - 10, 10))
         self.screen.blit(time_text, time_rect)
+
+        if self.paused:
+            overlay = pygame.Surface((WIN_WIDTH, WIN_HEIGHT))
+            overlay.set_alpha(180)
+            overlay.fill((0, 0, 0))
+            self.screen.blit(overlay, (0, 0))
+
+            pause_text = self.font.render("PAUSED", True, WHITE)
+            pause_rect = pause_text.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
+            self.screen.blit(pause_text, pause_rect)
 
         pygame.display.update()
 
@@ -257,7 +270,10 @@ class CoOp:
         self.new()
         while self.playing:
             self.events()
-            self.update()
+
+            if not self.paused:
+                self.update()
+
             self.draw()
                 
         self.playerLost()

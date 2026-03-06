@@ -117,7 +117,8 @@ class InstructionsMenu:
                 "Left and Right key: You can rotate your spaceship left or right to aim at the asteroids.\n"
                 "Upward key: This button moves your spaceship forward in the direction it's pointing.\n"
                 "Movement is based on real physics, so you will continue drifting in one direction until you apply thrust in another direction.\n"
-                "Space Key: Shoots bullets from your spaceship to break the asteroids into smaller pieces or destroy them entirely."
+                "Space Key: Shoots bullets from your spaceship to break the asteroids into smaller pieces or destroy them entirely.\n"
+                "Press P to pause and unpause the game."
             )   
         elif self.mechanicsButton.is_clicked(event):
             self.current_message = (
@@ -161,6 +162,7 @@ class InstructionsMenu:
                 "Asteroids come in various sizes. Large asteroids break into two medium ones when shot, and medium ones break into two small ones. Small asteroids disappear when shot.\n"
                 "Players are able to shoot each other, but bullets will only be able to shoot every five seconds, the main objective is to dodge\n"
                 "Players cannot collide with each other\n"
+                "Press P to pause and unpause the game."
             )
         elif self.powerupsButton.is_clicked(event):
             self.current_message = (
