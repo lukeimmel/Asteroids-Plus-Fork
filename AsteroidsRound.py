@@ -14,9 +14,10 @@ class Game:
     asteroid_timer = 0
     asteroid_spawn_delay = 0.7
 
-    def __init__(self, selected_ship=0, bg_path='Images/backgrounds/space-backgound.png', stars_path='Images/backgrounds/space-stars.png'):
+    def __init__(self, selected_ship=0, bg_path="Images/backgrounds/space-backgound.png", stars_path="Images/backgrounds/space-stars.png", cheat_mode=False):
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.selected_ship = selected_ship
+        self.cheat_mode = cheat_mode
 
         self.background = pygame.image.load(bg_path).convert_alpha()
         self.background = pygame.transform.scale(self.background, (WIN_WIDTH, WIN_HEIGHT))
@@ -178,8 +179,6 @@ class Game:
             self.powerups.add(powerup)
             self.spawn_timer_powerup = 0
 
-
-
     #create background screen for game
     def draw(self):
         self.screen.blit(self.background, (0,0))
@@ -196,8 +195,9 @@ class Game:
         time_rect = time_text.get_rect(topright=(WIN_WIDTH - 10, 10))
         self.screen.blit(time_text, time_rect)
 
-        lives_text = self.font.render('Lives: ' + str(self.player.lives), False, WHITE)
-        score_text = self.font.render('Score: ' + str(self.player.score), False, WHITE)
+        lives_label = "Lives: INF" if self.cheat_mode else "Lives: " + str(self.player.lives)
+        lives_text = self.font.render(lives_label, False, WHITE)
+        score_text = self.font.render("Score: " + str(self.player.score), False, WHITE)
 
         # Draw the lives text
         self.screen.blit(lives_text, (10, 10))
@@ -377,4 +377,3 @@ class Game:
         sys.exit()
 
         return 0
-
