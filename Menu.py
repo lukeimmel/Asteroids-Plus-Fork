@@ -36,13 +36,15 @@ class Menu:
         self.running = True
         self.playButton = Button((WIN_WIDTH/2 - 130, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "PLAY")
         self.shipSelect = Button((WIN_WIDTH/2 - 130, WIN_HEIGHT/2), (100, 100), WHITE, "SHIP", 'Images/ships/ship-a/ship-a-damaged.png')
-        self.exitButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 150), (100, 100), WHITE, "EXIT")
+        self.exitButton = Button((WIN_WIDTH / 2 + 20, WIN_HEIGHT / 2 + 150), (100, 100), WHITE, "EXIT")
         self.statButton = Button((WIN_WIDTH/2 -50, WIN_HEIGHT/2 + 300), (100, 100), WHITE, "STATS")
         self.instructionsButton = Button((WIN_WIDTH - 120, WIN_HEIGHT - 70), (100, 50), WHITE, "Help")
         self.soundButton = Button((20, WIN_HEIGHT - 70), (100, 50), WHITE, "Sound")
         self.coOpButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2 - 150), (100, 100), WHITE, "CO-OP")
         self.bgButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2), (100, 50), WHITE, "BG")
         self.starsButton = Button((WIN_WIDTH/2 + 20, WIN_HEIGHT/2 + 50), (100, 50), WHITE, "STARS")
+        #New cheater/sandbox mode - Jack
+        self.cheaterButton = Button((WIN_WIDTH / 2 - 130, WIN_HEIGHT / 2 + 150), (100, 100), WHITE, "CHEAT")
 
         # Bg File
         self.backgrounds = [
@@ -102,6 +104,7 @@ class Menu:
         self.coOpButton.draw(self.screen, BLACK)
         self.bgButton.draw(self.screen, BLACK)
         self.starsButton.draw(self.screen, BLACK)
+        self.cheaterButton.draw(self.screen, BLACK)
 
         pygame.display.update()
 
@@ -149,7 +152,12 @@ class Menu:
                         pygame.quit()
 
                 if self.playButton.is_clicked(event):
-                    g = Game(selected_ship, self.selected_bg, self.selected_stars)
+                    g = Game(selected_ship, self.selected_bg, self.selected_stars, cheat_mode=False)
+                    g.new()
+                    while g.running:
+                        g.main()
+                if self.cheaterButton.is_clicked(event):
+                    g = Game(selected_ship, self.selected_bg, self.selected_stars, cheat_mode=True)
                     g.new()
                     while g.running:
                         g.main()

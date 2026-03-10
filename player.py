@@ -13,7 +13,8 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups) #add player to all sprites group
 
         self.lives = PLAYER_LIVES
-        self.last_shot_time = 0  # Initialize the last shot time
+        self.space_held = False
+        self.shift_held = False
 
         # player position based on tile
         self.x = x * TILESIZE
@@ -41,6 +42,7 @@ class Player(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(0, 0)  # Initialize velocity vector
         self.acceleration = 0.2  # Adjust as needed for acceleration rate
         self.deceleration = 0.98  # Adjust as needed for deceleration rate
+        self.cheat_speed = 5
 
         #temporary value at init
         self.x_change = 0
@@ -110,20 +112,20 @@ class Player(pygame.sprite.Sprite):
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
-        current_time = pygame.time.get_ticks()
 
-        # Calculate the time elapsed since the last shot
-        time_since_last_shot = current_time - self.last_shot_time
+        space_pressed = keys[pygame.K_SPACE]
+        shift_pressed = keys[pygame.K_LSHIFT]
 
-        if keys[pygame.K_SPACE] and time_since_last_shot >= 500:  # Shoot only if 500 milliseconds (0.5 second) have passed since the last shot
-            self.shoot_regular_bullet()  # Shoot regular bullet when space key is pressed
+        if space_pressed and not self.space_held:
+            self.shoot_regular_bullet()
             PLAYER_CHANNEL.play(PLAYER_BULLET_MUSIC)
-            self.last_shot_time = current_time  # Update the last shot time
 
-        elif keys[pygame.K_LSHIFT] and time_since_last_shot >= 500:
+        if shift_pressed and not self.shift_held:
             self.shoot_special_bullet()
             PLAYER_CHANNEL.play(PLAYER_BULLET_MUSIC)
-            self.last_shot_time = current_time  # Update the last shot time
+
+        self.space_held = space_pressed
+        self.shift_held = shift_pressed
 
     def wrap_around_screen(self):
         if self.rect.right < 0:
@@ -163,14 +165,32 @@ class Player(pygame.sprite.Sprite):
     #function to make player move based on arrow keys
     def movement(self):
         keys = pygame.key.get_pressed()
+        if self.game.cheat_mode:
+            self.cheat_movement(keys) # added allow 45 degree movement
+            return
         if keys[pygame.K_LEFT]:
             self.turnLeft()
         if keys[pygame.K_RIGHT]:
             self.turnRight()
         if keys[pygame.K_UP]:
             self.moveForward()
+
+    def cheat_movement(self, keys):
+        x_input = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
+        y_input = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
+        if x_input == 0 and y_input == 0:
+            self.velocity = pygame.math.Vector2(0, 0)
+            return
+        move_vector = pygame.math.Vector2(x_input, y_input).normalize() * self.cheat_speed
+        self.velocity = move_vector
+        self.angle = math.degrees(math.atan2(move_vector.y, move_vector.x))
+        if self.angle < 0:
+            self.angle += 360
   
     def collide(self, spriteGroup):
+        #cheat mode disable collision damage
+        if self.game.cheat_mode:
+            return
         current_time = pygame.time.get_ticks()
         for sprite in spriteGroup:
             distance = math.sqrt((self.rect.centerx - sprite.rect.centerx) ** 2 + (self.rect.centery - sprite.rect.centery) ** 2)
