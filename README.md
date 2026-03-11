@@ -13,6 +13,8 @@ Before installing Asteroids Plus, ensure you have the following installed on you
   ```sh
   pip install pygame
   pip install pygame-widgets
+  pip install beautifulsoup4
+  pip install requests
 - refer the rest of the instructions to How to build section at the end of this file
 ### Installation Instructions
 #### Window Users
