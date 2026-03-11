@@ -8,6 +8,7 @@ from CoOp import *
 import pygame.font
 import config
 from soundControls import SoundControls
+from temple_news import get_temple_alerts
 
 
 class Menu:
@@ -64,6 +65,10 @@ class Menu:
         self.stars_index = 0
         self.selected_stars = self.stars_options[0]
 
+        self.alert_title_font = pygame.font.SysFont("arial", 28, bold=True)
+        self.alert_font = pygame.font.SysFont("arial", 18)
+        self.alert_lines = get_temple_alerts()
+
     def change_background(self):
         self.bg_index = (self.bg_index + 1) % len(self.backgrounds)
         self.selected_bg = self.backgrounds[self.bg_index]
@@ -106,6 +111,13 @@ class Menu:
         self.starsButton.draw(self.screen, BLACK)
         self.cheaterButton.draw(self.screen, BLACK)
 
+        alert_title = self.alert_title_font.render("Temple Alerts", True, WHITE)
+        self.screen.blit(alert_title, (40, 20))
+
+        for i, line in enumerate(self.alert_lines):
+            alert_text = self.alert_font.render(line[:35], True, WHITE)
+            self.screen.blit(alert_text, (40, 60 + i * 22))
+        
         pygame.display.update()
 
     def update_background(self):
